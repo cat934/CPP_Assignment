@@ -184,8 +184,8 @@ namespace ll {
     void buildAndPrintManifestForFlight(const string& flightID);
 
     // Seat occupancy
-    void displaySeatingChart();  // RENAME from displaySeating to displaySeatingChart
-    void displayManifest();      // ADD THIS
+    void displaySeatingChart();
+    void displayManifest();
 
     // Sort helpers
     void mergeSortByName(PassengerNode* arr[], int left, int right);
@@ -200,16 +200,15 @@ namespace ll {
 
     // Add/Delete
     void addPassenger();
-    void cancelReservation();    // RENAME from delPassenger to cancelReservation
+    void cancelReservation();
     bool isSeatBooked(int row, char col, const string& flightID);
-    void loadFromFile(const string& filename);  // ADD THIS
+    void loadFromFile(const string& filename);
 
     // Utility
     int getNodeCount();
-    PassengerNode** getAllNodesArray(); // Convert linked list to array for sorting
+    PassengerNode** getAllNodesArray();
     void freeNodesArray(PassengerNode* arr[]);
 
-    // Additional functions you implemented
     void insertAtBeginning(Passenger data);
     void insertAtEnd(Passenger data);
     void insertAtPosition(Passenger data, int pos);
