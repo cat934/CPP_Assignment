@@ -30,12 +30,10 @@ namespace arr {
 }
 
 //Linked List
-// ADD THIS: Node for linked list implementation
 struct PassengerNode {
-    Passenger data;           // The passenger data
+    Passenger data;
     PassengerNode* next;
 
-    // Optional: constructor for convenience
     PassengerNode(const Passenger& p) : data(p), next(nullptr) {}
 };
 
