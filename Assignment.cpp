@@ -77,12 +77,10 @@ static int readInt() {
     }
 }
 
-
-
-
 int main() {
     string filename = "Flite_passenger_Dataset_FIDs.csv";
     arr::loadPassengers(filename);
+    ll::loadFromFile(filename);
 
     int choice;
 
@@ -323,7 +321,7 @@ int main() {
                 llChoice = readInt();
 
                 if (llChoice < 0 || llChoice > 7) {
-                    cout << "Invalid choice! Please enter 0–7.\n";
+                    cout << "Invalid choice! Please enter 0â€“7.\n";
                     continue;
                 }
 
@@ -377,3 +375,4 @@ int main() {
 
     return 0;
 }  // End of main()
+
