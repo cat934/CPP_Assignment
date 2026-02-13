@@ -1,0 +1,1 @@
+This project is about designing and developing a flight reservation and seating management system using C++ and fundamental data structures, specifically arrays and linked lists, to manage passenger bookings, seat allocation, cancellations, and seat lookups, with an evaluation of their time and space efficiency.
