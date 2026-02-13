@@ -7,11 +7,29 @@
 #include <limits>
 using namespace std;
 
-// Allow using array namespace function
+// Allow array namespace function
 using arr::isValidFlightID_001_079;
 
 // External declaration
 extern PassengerNode* ll_head;
+
+class SimpleSpaceTracker {
+private:
+    const char* label;
+
+public:
+    SimpleSpaceTracker(const char* lbl) : label(lbl) {
+        cout << "\n[SpaceTracker START] " << label << "\n";
+    }
+
+    ~SimpleSpaceTracker() {
+        size_t auxiliarySpace = sizeof(PassengerNode*) * 2;
+
+        cout << "[SpaceTracker END] " << label << "\n";
+        cout << "Auxiliary Space Used: " << auxiliarySpace
+             << " bytes (" << (auxiliarySpace / 1024.0) << " KB)\n";
+    }
+};
 
 namespace ll {
 
@@ -49,7 +67,6 @@ namespace ll {
                 flightID
             };
 
-            // Add to linked list
             PassengerNode* newNode = new PassengerNode(p);
             newNode->next = ll_head;
             ll_head = newNode;
@@ -90,7 +107,7 @@ namespace ll {
             return;
         }
 
-        // Search for node to delete
+        // Search node to delete
         PassengerNode* current = ll_head;
         PassengerNode* prev = nullptr;
 
@@ -104,7 +121,7 @@ namespace ll {
             return;
         }
 
-        // Remove the node
+        // Remove node
         prev->next = current->next;
         delete current;
 
@@ -115,37 +132,51 @@ namespace ll {
 
     // ==================== 3. DISPLAY MANIFEST ====================
     void displayManifest() {
-        Timer timer;
+    Timer timer;
 
-        if (ll_head == nullptr) {
-            cout << "No passengers in manifest.\n";
-            return;
-        }
+    // Start tracking
+    cout << "\n[SpaceTracker START] Linked List Manifest Display\n";
 
-        cout << "\n===== LINKED LIST PASSENGER MANIFEST =====\n";
-        cout << left << setw(10) << "ID"
-             << setw(20) << "Name"
-             << setw(10) << "Seat"
-             << setw(12) << "Class"
-             << setw(10) << "Flight" << endl;
-        cout << string(62, '-') << endl;
+    if (ll_head == nullptr) {
+        cout << "No passengers in manifest.\n";
+        cout << "[SpaceTracker END] Linked List Manifest Display\n";
+        cout << "Auxiliary Space Used: 0 bytes (0 KB)\n";
+        return;
+    }
 
-        int count = 0;
-        PassengerNode* current = ll_head;
-        while (current != nullptr) {
-            cout << left << setw(10) << current->data.passengerID
-                 << setw(20) << current->data.name
-                 << setw(10) << (to_string(current->data.seatRow) + current->data.seatColumn)
-                 << setw(12) << current->data.seatClass
-                 << setw(10) << current->data.flightID << endl;
+    cout << "\n===== LINKED LIST PASSENGER MANIFEST =====\n";
+    cout << left << setw(10) << "ID"
+         << setw(20) << "Name"
+         << setw(10) << "Seat"
+         << setw(12) << "Class"
+         << setw(10) << "Flight" << endl;
+    cout << string(62, '-') << endl;
 
-            current = current->next;
-            count++;
-        }
+    int count = 0;
+    size_t memory_used = sizeof(PassengerNode*);
 
-        cout << "\nTotal passengers: " << count << endl;
-        double ms = timer.stopMs();
-        cout << "Time Taken: " << ms << " ms\n";
+    PassengerNode* current = ll_head;
+    while (current != nullptr) {
+        cout << left << setw(10) << current->data.passengerID
+             << setw(20) << current->data.name
+             << setw(10) << (to_string(current->data.seatRow) + current->data.seatColumn)
+             << setw(12) << current->data.seatClass
+             << setw(10) << current->data.flightID << endl;
+
+        current = current->next;
+        count++;
+    }
+
+    // Add memory for count variable
+    memory_used += sizeof(int);
+
+    cout << "\nTotal passengers: " << count << endl;
+    double ms = timer.stopMs();
+    cout << "Time Taken: " << ms << " ms\n";
+
+    cout << "[SpaceTracker END] Linked List Manifest Display\n";
+    cout << "Auxiliary Space Used: " << memory_used
+         << " bytes (" << (memory_used / 1024.0) << " KB)\n";
     }
 
     // ==================== 4. DISPLAY SEATING CHART ====================
@@ -161,7 +192,6 @@ namespace ll {
             return;
         }
 
-        // Validate flight ID
         if (!arr::isValidFlightID_001_079(flightID)) {
             cout << "Invalid Flight ID.\n";
             return;
@@ -172,14 +202,12 @@ namespace ll {
 
         bool hasPassengers = false;
 
-        // Check each seat
         for (int row = 1; row <= 30; row++) {
             cout << setw(2) << row << " ";
 
             for (char col = 'A'; col <= 'F'; col++) {
                 bool occupied = false;
 
-                // Check linked list for this seat
                 PassengerNode* current = ll_head;
                 while (current != nullptr) {
                     if (current->data.flightID == flightID &&
@@ -196,7 +224,6 @@ namespace ll {
             }
             cout << endl;
 
-            // Add section labels
             if (row == 3) cout << "   --- First Class ---\n";
             if (row == 10) cout << "   --- Business Class ---\n";
         }
@@ -217,7 +244,6 @@ namespace ll {
 
         cout << "\n=== ADD NEW PASSENGER ===\n";
 
-        // Generate ID
         int maxID = 0;
         PassengerNode* current = ll_head;
         while (current != nullptr) {
@@ -255,7 +281,6 @@ namespace ll {
                 return;
             }
 
-            // Use the array version's validation function
             if (!arr::isValidFlightID_001_079(p.flightID)) {
                 cout << "Invalid Flight ID. Must be FL001 to FL079.\n";
                 continue;
@@ -291,14 +316,12 @@ namespace ll {
             break;
         }
 
-        // Set seat class based on choice
         if (classChoice == 1) p.seatClass = "Economy";
         else if (classChoice == 2) p.seatClass = "Business";
         else p.seatClass = "First";
 
         // === SEAT ROW INPUT (with class validation) ===
         int startRow, endRow;
-        // Get row range based on class
         if (p.seatClass == "First") {
             startRow = 1; endRow = 3;
         } else if (p.seatClass == "Business") {
@@ -346,7 +369,7 @@ namespace ll {
                 return;
             }
 
-            // Convert to uppercase if needed
+            // Convert to uppercase
             if (p.seatColumn >= 'a' && p.seatColumn <= 'f') {
                 p.seatColumn = toupper(p.seatColumn);
             }
@@ -422,3 +445,4 @@ namespace ll {
         return value;
     }
 }
+
