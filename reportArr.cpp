@@ -51,7 +51,7 @@ namespace arr {
 
         // ---- Space tracking ----
         spaceRadix.addArray<Passenger*>(passengerCount); // output array
-        spaceRadix.addArray<int>(10);                     // digit count (0–9)
+        spaceRadix.addArray<int>(10);                     // digit count (0â€“9)
         spaceRadix.addVar<int>();                         // exp variable
 
         spaceBubble.addVar<int>();
